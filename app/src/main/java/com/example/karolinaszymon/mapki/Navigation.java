@@ -84,12 +84,12 @@ public class Navigation extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_account) {
-            Intent intent = new Intent(Navigation.this,MainActivity.class);
-            startActivity(intent);
+
         } else if (id == R.id.nav_map) {
             fm.beginTransaction().replace(R.id.content_frame, new GmapFragment()).commit();
         } else if (id == R.id.nav_logout) {
-
+            Intent intent = new Intent(Navigation.this,MainActivity.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
