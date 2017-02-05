@@ -16,8 +16,14 @@
           $json = logout();
           echo(json_encode($json));
           break;
-
-
+        case 'addLocation':
+          $json = addLocation();
+          echo(json_encode($json));
+          break;
+        case 'getOwnedLocations':
+          $json = getOwnedLocations();
+          echo(json_encode($json));
+          break;
       }
       break;
   }
@@ -46,7 +52,6 @@
           $response = $check;
           $_SESSION['user'] = $user;
         }
-
       }
     }
     else{
@@ -62,6 +67,32 @@
     }
     else{
       $response['error'] = "Nobody was logged";
+    }
+    return $response;
+  }
+
+  function addLocation(){
+    if(isset($_SESSION['user'])){
+      if(isset($_POST['description'],$_POST['x_coord'],$_POST['y_coord'],$_POST['private'])){
+        $userId = $_SESSION['user']->getId();
+        $response['success'] = addLocationDB($userId,$_POST['x_coord'],$_POST['y_coord'],$_POST['description'],$_POST['private']);
+      }
+      else{
+        $response['error'] = "Set all params";
+      }
+    }
+    else{
+      $response['error'] = "You are not logged on";
+    }
+    return $response;
+  }
+
+  function getOwnedLocations(){
+    if(isset($_SESSION['user'])){
+      $response['success'] = getPlayersLocationsDB($_SESSION['user']->getId());
+    }
+    else{
+      $response['error'] = "You are not logged on";
     }
     return $response;
   }
