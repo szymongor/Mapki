@@ -31,16 +31,13 @@ public class MainActivity extends AppCompatActivity {
     EditText loginET;
     EditText passwordET;
 
-    RequestQueue requestQueue;
-    StringRequest request;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initUIComponents();
-
-        requestQueue = Volley.newRequestQueue(this);
+        //apiClient = new MapkiApiClient();
     }
 
     private void initUIComponents(){
@@ -57,47 +54,7 @@ public class MainActivity extends AppCompatActivity {
     private View.OnClickListener clickLoginBTN = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-
-            request = new StringRequest(Request.Method.POST,URL,
-                    new Response.Listener<String>(){
-                        @Override
-                        public void onResponse(String response) {
-                            try {
-                                JSONObject jsonObject = new JSONObject(response);
-                                if(jsonObject.names().get(0).equals("success")){
-                                    Toast.makeText(getApplicationContext(),
-                                            "Success. "+jsonObject.getString("success"),Toast.LENGTH_SHORT).show();
-
-                                    Intent intent = new Intent(MainActivity.this,Navigation.class);
-                                    startActivity(intent);
-                                }
-                                else{
-                                    Toast.makeText(getApplicationContext(),
-                                            "Error "+jsonObject.getString("error"),Toast.LENGTH_SHORT).show();
-                                }
-                            } catch (JSONException e) {e.printStackTrace();
-
-                            }
-                        }
-            },
-                    new Response.ErrorListener(){
-
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-
-                        }
-                    }
-            ){
-                @Override
-                protected Map<String, String> getParams() throws AuthFailureError {
-                    HashMap<String,String> hashMap = new HashMap<String,String>();
-                    hashMap.put("login",loginET.getText().toString());
-                    hashMap.put("password",passwordET.getText().toString());
-                    return hashMap;
-                }
-            };
-
-            requestQueue.add(request);
+            MapkiApiClient.login(loginET.getText().toString(),passwordET.getText().toString(),getApplicationContext());
 
         }
     };
