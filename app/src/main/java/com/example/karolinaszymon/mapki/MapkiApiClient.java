@@ -14,6 +14,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.net.CookieManager;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -26,6 +27,7 @@ public class MapkiApiClient{
     static final String URLLOGIN = "http://szymgor.ayz.pl/Mapki/MapkiApi.php/login";
     static MapkiApiClient mapkiApiClient;
     static ApiTask apiTask = null;
+    static CookieManager cookieManager = new CookieManager();
 
     private MapkiApiClient(){
 
@@ -33,7 +35,7 @@ public class MapkiApiClient{
 
 
     public static void login(String login, String password, Context context){
-        apiTask = new ApiTask(login, password, context);
+        apiTask = new ApiTask(login, password, context, cookieManager);
         URL url = null;
         try {
             url = new URL(URLLOGIN);

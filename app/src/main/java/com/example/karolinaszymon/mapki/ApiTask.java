@@ -17,6 +17,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.net.CookieHandler;
+import java.net.CookieManager;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -30,11 +32,14 @@ public class ApiTask extends AsyncTask<URL,Integer,String> {
     Context context;
     String login;
     String password;
+    CookieManager cookieManager;
 
-    public ApiTask(String login, String password, Context context){
+    public ApiTask(String login, String password, Context context, CookieManager cookieManager){
         this.login = login;
         this.password = password;
         this.context = context;
+        this.cookieManager = cookieManager;
+
     }
 
     @Override
@@ -43,6 +48,7 @@ public class ApiTask extends AsyncTask<URL,Integer,String> {
         String response = null;
         HttpURLConnection urlConnection = null;
         try {
+            CookieHandler.setDefault(cookieManager);
             url = params[0];
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("POST");
