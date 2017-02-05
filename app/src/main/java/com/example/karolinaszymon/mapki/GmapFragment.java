@@ -64,6 +64,7 @@ public class GmapFragment extends Fragment implements OnMapReadyCallback, Google
         mapFragment.getMapAsync(this);
         initClients();
         initUI();
+        showOwnedLocatons();
 
 
     }
@@ -173,7 +174,16 @@ public class GmapFragment extends Fragment implements OnMapReadyCallback, Google
         super.onStop();
         googleApiClient.disconnect();
     }
-    
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public void showOwnedLocatons(){
+        MapkiApiClient.getOwnedLocations(this);
+    }
+
+    public void showLocation(Double x, Double y, String description){
+        LatLng location = new LatLng(x, y);
+        mMap.addMarker(new MarkerOptions().position(location).title(description));
+    }
 
     public void showAddLocation(GoogleMap map, Double currentLatitude, Double currentLongitude){
 

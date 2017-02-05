@@ -89,7 +89,8 @@
 
   function getOwnedLocations(){
     if(isset($_SESSION['user'])){
-      $response['success'] = getPlayersLocationsDB($_SESSION['user']->getId());
+      $response['success'] = "Your locations updated";
+      $response['locations'] = getPlayersLocationsDB($_SESSION['user']->getId());
     }
     else{
       $response['error'] = "You are not logged on";

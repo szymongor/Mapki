@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -36,10 +38,20 @@ public class ApiTask extends AsyncTask<URL,Integer,String> {
     HashMap<String,String> parameters;
     CookieManager cookieManager;
     Class moveTo;
+    GmapFragment gmap;
 
     public ApiTask(HashMap<String,String> parameters, Context context, CookieManager cookieManager, Class moveTo){
         this.parameters = parameters;
         this.context = context;
+        this.cookieManager = cookieManager;
+        this.moveTo = moveTo;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public ApiTask(GmapFragment gmap, CookieManager cookieManager, Class moveTo){
+        this.parameters = new HashMap<String, String>();
+        this.gmap = gmap;
+        this.context = gmap.getContext();
         this.cookieManager = cookieManager;
         this.moveTo = moveTo;
     }
@@ -89,9 +101,13 @@ public class ApiTask extends AsyncTask<URL,Integer,String> {
         try {
             JSONObject jsonObject = new JSONObject(result);
             if(jsonObject.names().get(0).equals("success")){
+
                 Toast.makeText(context,
                         "Success: "+jsonObject.getString("success"),Toast.LENGTH_SHORT).show();
-                if(moveTo!= null){
+                if(jsonObject.names().length() == 2 && jsonObject.names().get(1).equals("locations") && gmap != null){
+                    gmap.showLocation(23.3,32.0,"Dziala cos tam");
+                }
+                else if(moveTo!= null){
                     Intent startActivity = new Intent();
                     startActivity.setClass(context, moveTo);
                     startActivity.setAction(moveTo.getName());

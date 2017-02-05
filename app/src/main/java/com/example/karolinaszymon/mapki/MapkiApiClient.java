@@ -4,6 +4,8 @@ package com.example.karolinaszymon.mapki;
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
 
 import java.io.BufferedInputStream;
@@ -28,6 +30,7 @@ public class MapkiApiClient{
     static final String URLLOGIN = "http://szymgor.ayz.pl/Mapki/MapkiApi.php/login";
     static final String URLLOGOUT = "http://szymgor.ayz.pl/Mapki/MapkiApi.php/logout";
     static final String URLADDLOCATION = "http://szymgor.ayz.pl/Mapki/MapkiApi.php/addLocation";
+    static final String URLGETOWNEDLOCATIONS = "http://szymgor.ayz.pl/Mapki/MapkiApi.php/getOwnedLocations";
     private final boolean isLoggedOn = false;
 
     static MapkiApiClient mapkiApiClient;
@@ -82,4 +85,19 @@ public class MapkiApiClient{
         }
 
     }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public static void getOwnedLocations(GmapFragment gMap){
+        HashMap params = new HashMap<String, String>();
+        apiTask = new ApiTask(gMap, cookieManager, null);
+        URL url = null;
+        try {
+            url = new URL(URLGETOWNEDLOCATIONS);
+            apiTask.execute(url);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
 }
