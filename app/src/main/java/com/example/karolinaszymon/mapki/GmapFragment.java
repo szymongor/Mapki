@@ -2,7 +2,9 @@ package com.example.karolinaszymon.mapki;
 
 import android.*;
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
@@ -18,6 +20,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -42,6 +45,7 @@ public class GmapFragment extends Fragment implements OnMapReadyCallback, Google
     private GoogleApiClient googleApiClient;
     private LocationRequest locationRequest;
     protected static String TAG = "GmapFragment";
+    private Context context;
 
 
     @Nullable
@@ -64,14 +68,18 @@ public class GmapFragment extends Fragment implements OnMapReadyCallback, Google
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     private void initUI() {
+        context = this.getContext();
         FloatingActionButton fab = (FloatingActionButton) getView().findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                LatLng sydney = new LatLng(myLatitude, myLongitude);
-                mMap.addMarker(new MarkerOptions().position(sydney).title("Jestem gotowy by jeść!"));
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+                if(myLatitude !=null && myLongitude!=null ){
+                    showAddLocation(mMap,myLatitude,myLatitude);
+
+                }
+
                 /*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();*/
             }
@@ -164,5 +172,48 @@ public class GmapFragment extends Fragment implements OnMapReadyCallback, Google
     public void onStop() {
         super.onStop();
         googleApiClient.disconnect();
+    }
+    
+
+    public void showAddLocation(GoogleMap map, Double currentLatitude, Double currentLongitude){
+
+        // get prompts.xml view
+        LayoutInflater li = LayoutInflater.from(context);
+        View promptsView = li.inflate(R.layout.add_location, null);
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                context);
+
+        // set prompts.xml to alertdialog builder
+        alertDialogBuilder.setView(promptsView);
+        final EditText userInput = (EditText) promptsView
+                .findViewById(R.id.editTextDialogUserInput);
+
+
+        // set dialog message
+        alertDialogBuilder
+                .setCancelable(false)
+                .setPositiveButton("OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+
+                                LatLng currentLocation = new LatLng(myLatitude, myLongitude);
+                                mMap.addMarker(new MarkerOptions().position(currentLocation).title(userInput.getText().toString()));
+                                mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLocation));
+                                MapkiApiClient.addLocation(context, myLatitude, myLatitude, userInput.getText().toString(), false);
+                            }
+                        })
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+        // create alert dialog
+        AlertDialog alertDialog = alertDialogBuilder.create();
+
+        // show it
+        alertDialog.show();
     }
 }

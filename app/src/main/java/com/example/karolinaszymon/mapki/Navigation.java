@@ -106,13 +106,12 @@ public class Navigation extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_account) {
+            addLocation();
            // fm.beginTransaction().replace(R.id.content_frame, new BlankFragment()).commit();
         } else if (id == R.id.nav_map) {
             fm.beginTransaction().replace(R.id.content_frame, new GmapFragment()).commit();
         } else if (id == R.id.nav_logout) {
             logout();
-            Intent intent = new Intent(Navigation.this,MainActivity.class);
-            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -121,8 +120,18 @@ public class Navigation extends AppCompatActivity
     }
 
 
+    public void addLocation() {
+        Double x = 12.34;
+        Double y = -43.21;
+        MapkiApiClient.addLocation(this, x, y, "Punkt dodany z apki", false);
+    }
+
 
     public void logout(){
+        MapkiApiClient.logout(this, MainActivity.class);
+    }
+
+/*    public void logout(){
         request = new StringRequest(Request.Method.POST,URLLOGOUT,
                 new Response.Listener<String>(){
                     @Override
@@ -159,5 +168,5 @@ public class Navigation extends AppCompatActivity
         };
 
         requestQueue.add(request);
-    }
+    }*/
 }

@@ -73,9 +73,9 @@
 
   function addLocation(){
     if(isset($_SESSION['user'])){
-      if(isset($_POST['description'],$_POST['x_coord'],$_POST['y_coord'],$_POST['private'])){
+      if(isset($_POST['description'],$_POST['coord_x'],$_POST['coord_y'],$_POST['private'])){
         $userId = $_SESSION['user']->getId();
-        $response['success'] = addLocationDB($userId,$_POST['x_coord'],$_POST['y_coord'],$_POST['description'],$_POST['private']);
+        $response['success'] = addLocationDB($userId,$_POST['coord_x'],$_POST['coord_y'],$_POST['description'],$_POST['private']);
       }
       else{
         $response['error'] = "Set all params";

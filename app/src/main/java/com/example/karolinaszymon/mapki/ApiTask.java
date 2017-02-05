@@ -22,6 +22,9 @@ import java.net.CookieManager;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Szymon on 05.02.2017.
@@ -30,16 +33,15 @@ import java.net.URL;
 public class ApiTask extends AsyncTask<URL,Integer,String> {
 
     Context context;
-    String login;
-    String password;
+    HashMap<String,String> parameters;
     CookieManager cookieManager;
+    Class moveTo;
 
-    public ApiTask(String login, String password, Context context, CookieManager cookieManager){
-        this.login = login;
-        this.password = password;
+    public ApiTask(HashMap<String,String> parameters, Context context, CookieManager cookieManager, Class moveTo){
+        this.parameters = parameters;
         this.context = context;
         this.cookieManager = cookieManager;
-
+        this.moveTo = moveTo;
     }
 
     @Override
@@ -55,9 +57,11 @@ public class ApiTask extends AsyncTask<URL,Integer,String> {
             urlConnection.setDoOutput(true);
             urlConnection.setDoOutput(true);
 
-            Uri.Builder builder = new Uri.Builder()
-                    .appendQueryParameter("login", login)
-                    .appendQueryParameter("password", password);
+            Uri.Builder builder = new Uri.Builder().appendQueryParameter("", "");
+
+            for (Map.Entry<String, String> entry:parameters.entrySet()) {
+                builder.appendQueryParameter(entry.getKey(), entry.getValue());
+            }
             String query = builder.build().getEncodedQuery();
 
             OutputStream os = urlConnection.getOutputStream();
@@ -87,14 +91,16 @@ public class ApiTask extends AsyncTask<URL,Integer,String> {
             if(jsonObject.names().get(0).equals("success")){
                 Toast.makeText(context,
                         "Success: "+jsonObject.getString("success"),Toast.LENGTH_SHORT).show();
+                if(moveTo!= null){
+                    Intent startActivity = new Intent();
+                    startActivity.setClass(context, moveTo);
+                    startActivity.setAction(moveTo.getName());
+                    startActivity.setFlags(
+                            Intent.FLAG_ACTIVITY_NEW_TASK
+                                    | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+                    context.startActivity(startActivity);
+                }
 
-                Intent startActivity = new Intent();
-                startActivity.setClass(context, Navigation.class);
-                startActivity.setAction(Navigation.class.getName());
-                startActivity.setFlags(
-                        Intent.FLAG_ACTIVITY_NEW_TASK
-                                | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-                context.startActivity(startActivity);
             }
             else{
                 Toast.makeText(context,

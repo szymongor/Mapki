@@ -37,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initUIComponents();
-        //apiClient = new MapkiApiClient();
     }
 
     private void initUIComponents(){
@@ -54,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
     private View.OnClickListener clickLoginBTN = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            MapkiApiClient.login(loginET.getText().toString(),passwordET.getText().toString(),getApplicationContext());
+            MapkiApiClient.login(loginET.getText().toString(),passwordET.getText().toString(),getApplicationContext(),Navigation.class);
 
         }
     };
