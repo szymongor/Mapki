@@ -24,7 +24,7 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
-    static final String URL = "http://szymgor.ayz.pl/Mapki/user_control.php";
+    static final String URL = "http://szymgor.ayz.pl/Mapki/MapkiApi.php/login";
 
     Button loginBTN;
     Button registerBTN;
@@ -32,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
     EditText passwordET;
 
     RequestQueue requestQueue;
-
     StringRequest request;
 
     @Override
@@ -67,14 +66,14 @@ public class MainActivity extends AppCompatActivity {
                                 JSONObject jsonObject = new JSONObject(response);
                                 if(jsonObject.names().get(0).equals("success")){
                                     Toast.makeText(getApplicationContext(),
-                                            "SUCCESS "+jsonObject.getString("success"),Toast.LENGTH_SHORT).show();
+                                            "Success. "+jsonObject.getString("success"),Toast.LENGTH_SHORT).show();
 
                                     Intent intent = new Intent(MainActivity.this,Navigation.class);
                                     startActivity(intent);
                                 }
                                 else{
                                     Toast.makeText(getApplicationContext(),
-                                            "ERROR "+jsonObject.getString("error"),Toast.LENGTH_SHORT).show();
+                                            "Error "+jsonObject.getString("error"),Toast.LENGTH_SHORT).show();
                                 }
                             } catch (JSONException e) {e.printStackTrace();
 
@@ -92,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 protected Map<String, String> getParams() throws AuthFailureError {
                     HashMap<String,String> hashMap = new HashMap<String,String>();
-                    hashMap.put("email",loginET.getText().toString());
+                    hashMap.put("login",loginET.getText().toString());
                     hashMap.put("password",passwordET.getText().toString());
                     return hashMap;
                 }

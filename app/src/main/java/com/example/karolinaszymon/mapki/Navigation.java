@@ -15,8 +15,27 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class Navigation extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    static final String URLLOGOUT = "http://szymgor.ayz.pl/Mapki/MapkiApi.php/logout";
+
+    RequestQueue requestQueue;
+    StringRequest request;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +63,7 @@ public class Navigation extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        requestQueue = Volley.newRequestQueue(this);
     }
 
     @Override
@@ -90,6 +110,7 @@ public class Navigation extends AppCompatActivity
         } else if (id == R.id.nav_map) {
             fm.beginTransaction().replace(R.id.content_frame, new GmapFragment()).commit();
         } else if (id == R.id.nav_logout) {
+            logout();
             Intent intent = new Intent(Navigation.this,MainActivity.class);
             startActivity(intent);
         }
@@ -97,5 +118,46 @@ public class Navigation extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+
+
+    public void logout(){
+        request = new StringRequest(Request.Method.POST,URLLOGOUT,
+                new Response.Listener<String>(){
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            if(jsonObject.names().get(0).equals("success")){
+                                Toast.makeText(getApplicationContext(),
+                                        "Success. "+jsonObject.getString("success"),Toast.LENGTH_SHORT).show();
+
+                            }
+                            else{
+                                Toast.makeText(getApplicationContext(),
+                                        "Error "+jsonObject.getString("error"),Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {e.printStackTrace();
+
+                        }
+                    }
+                },
+                new Response.ErrorListener(){
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }
+        ){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String,String> hashMap = new HashMap<String,String>();
+                return hashMap;
+            }
+        };
+
+        requestQueue.add(request);
     }
 }
