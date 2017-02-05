@@ -55,7 +55,7 @@
 		$result = @$db_connect->query($queryStr);
     $locations = array();
 
-    while (@$row=mysqli_fetch_row($result))
+    while (@$row=mysqli_fetch_assoc($result))
 		{
 			array_push($locations, $row);
 		}

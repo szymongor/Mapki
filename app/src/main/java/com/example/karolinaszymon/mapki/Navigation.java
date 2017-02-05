@@ -106,7 +106,6 @@ public class Navigation extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_account) {
-            addLocation();
            // fm.beginTransaction().replace(R.id.content_frame, new BlankFragment()).commit();
         } else if (id == R.id.nav_map) {
             fm.beginTransaction().replace(R.id.content_frame, new GmapFragment()).commit();
@@ -120,53 +119,8 @@ public class Navigation extends AppCompatActivity
     }
 
 
-    public void addLocation() {
-        Double x = 12.34;
-        Double y = -43.21;
-        MapkiApiClient.addLocation(this, x, y, "Punkt dodany z apki", false);
-    }
-
-
     public void logout(){
         MapkiApiClient.logout(this, MainActivity.class);
     }
-
-/*    public void logout(){
-        request = new StringRequest(Request.Method.POST,URLLOGOUT,
-                new Response.Listener<String>(){
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            JSONObject jsonObject = new JSONObject(response);
-                            if(jsonObject.names().get(0).equals("success")){
-                                Toast.makeText(getApplicationContext(),
-                                        "Success. "+jsonObject.getString("success"),Toast.LENGTH_SHORT).show();
-
-                            }
-                            else{
-                                Toast.makeText(getApplicationContext(),
-                                        "Error "+jsonObject.getString("error"),Toast.LENGTH_SHORT).show();
-                            }
-                        } catch (JSONException e) {e.printStackTrace();
-
-                        }
-                    }
-                },
-                new Response.ErrorListener(){
-
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-
-                    }
-                }
-        ){
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                HashMap<String,String> hashMap = new HashMap<String,String>();
-                return hashMap;
-            }
-        };
-
-        requestQueue.add(request);
-    }*/
+    
 }

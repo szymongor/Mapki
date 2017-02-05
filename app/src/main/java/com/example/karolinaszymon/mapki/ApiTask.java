@@ -6,9 +6,11 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.util.JsonReader;
 import android.util.Log;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -25,6 +27,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -105,7 +108,7 @@ public class ApiTask extends AsyncTask<URL,Integer,String> {
                 Toast.makeText(context,
                         "Success: "+jsonObject.getString("success"),Toast.LENGTH_SHORT).show();
                 if(jsonObject.names().length() == 2 && jsonObject.names().get(1).equals("locations") && gmap != null){
-                    gmap.showLocation(23.3,32.0,"Dziala cos tam");
+                    showLocations(gmap,jsonObject.get("locations").toString());
                 }
                 else if(moveTo!= null){
                     Intent startActivity = new Intent();
@@ -136,5 +139,20 @@ public class ApiTask extends AsyncTask<URL,Integer,String> {
         }
         is.close();
         return sb.toString();
+    }
+
+    private void showLocations(GmapFragment gmap, String locations) throws JSONException {
+        Log.d("Locations: ", locations);
+        JSONArray locationsArray = new JSONArray(locations);
+        int size = locationsArray.length();
+        for(int i = 0 ; i < size ; i++){
+            JSONObject location = new JSONObject(locationsArray.get(i).toString());
+            Double x = Double.parseDouble(location.get("x_coord").toString());
+            Double y = Double.parseDouble(location.get("y_coord").toString());
+            String desc = location.getString("description");
+            gmap.showLocation(x,y,desc);
+            Log.d("Lokacja dodana :", "X:"+x.toString()+" Y:"+y.toString());
+        }
+
     }
 }

@@ -77,7 +77,7 @@ public class GmapFragment extends Fragment implements OnMapReadyCallback, Google
             @Override
             public void onClick(View view) {
                 if(myLatitude !=null && myLongitude!=null ){
-                    showAddLocation(mMap,myLatitude,myLatitude);
+                    showAddLocation(mMap,myLatitude,myLongitude);
 
                 }
 
@@ -210,7 +210,7 @@ public class GmapFragment extends Fragment implements OnMapReadyCallback, Google
                                 LatLng currentLocation = new LatLng(myLatitude, myLongitude);
                                 mMap.addMarker(new MarkerOptions().position(currentLocation).title(userInput.getText().toString()));
                                 mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLocation));
-                                MapkiApiClient.addLocation(context, myLatitude, myLatitude, userInput.getText().toString(), false);
+                                MapkiApiClient.addLocation(context, myLatitude, myLongitude, userInput.getText().toString(), false);
                             }
                         })
                 .setNegativeButton("Cancel",
