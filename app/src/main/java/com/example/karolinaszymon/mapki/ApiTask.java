@@ -54,7 +54,7 @@ public class ApiTask extends AsyncTask<URL,Integer,String> {
     public ApiTask(GmapFragment gmap, CookieManager cookieManager, Class moveTo){
         this.parameters = new HashMap<String, String>();
         this.gmap = gmap;
-        this.context = gmap.getContext();
+        this.context = gmap.getActivity();
         this.cookieManager = cookieManager;
         this.moveTo = moveTo;
     }

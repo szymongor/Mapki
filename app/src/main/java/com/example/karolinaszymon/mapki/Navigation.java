@@ -122,5 +122,5 @@ public class Navigation extends AppCompatActivity
     public void logout(){
         MapkiApiClient.logout(this, MainActivity.class);
     }
-    
+
 }

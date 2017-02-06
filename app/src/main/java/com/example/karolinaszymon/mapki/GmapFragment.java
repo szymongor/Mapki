@@ -71,7 +71,7 @@ public class GmapFragment extends Fragment implements OnMapReadyCallback, Google
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void initUI() {
-        context = this.getContext();
+        context = this.getActivity();
         FloatingActionButton fab = (FloatingActionButton) getView().findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,7 +89,7 @@ public class GmapFragment extends Fragment implements OnMapReadyCallback, Google
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void initClients() {
-        googleApiClient = new GoogleApiClient.Builder(this.getContext())
+        googleApiClient = new GoogleApiClient.Builder(this.getActivity())
                 .addApi(LocationServices.API)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -106,7 +106,7 @@ public class GmapFragment extends Fragment implements OnMapReadyCallback, Google
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        if (ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             mMap.setMyLocationEnabled(true);
         } else {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -124,7 +124,7 @@ public class GmapFragment extends Fragment implements OnMapReadyCallback, Google
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void requestLocationUpdates() {
-        if (ActivityCompat.checkSelfPermission(this.getContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ) {
+        if (ActivityCompat.checkSelfPermission(this.getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ) {
             LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
         }
 
@@ -156,7 +156,7 @@ public class GmapFragment extends Fragment implements OnMapReadyCallback, Google
     @Override
     public void onPause() {
         super.onPause();
-        if (ActivityCompat.checkSelfPermission(this.getContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED )
+        if (ActivityCompat.checkSelfPermission(this.getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED )
         LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient,this);
     }
 
