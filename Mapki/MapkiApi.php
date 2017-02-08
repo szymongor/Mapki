@@ -24,6 +24,10 @@
           $json = getOwnedLocations();
           echo(json_encode($json));
           break;
+        case 'deleteLocation':
+          $json = deleteLocation();
+          echo(json_encode($json));
+          break;
       }
       break;
   }
@@ -91,6 +95,30 @@
     if(isset($_SESSION['user'])){
       $response['success'] = "Your locations updated";
       $response['locations'] = getPlayersLocationsDB($_SESSION['user']->getId());
+    }
+    else{
+      $response['error'] = "You are not logged on";
+    }
+    return $response;
+  }
+
+  function deleteLocation(){
+    if(isset($_SESSION['user'])){
+      if(isset($_POST['location_id'])){
+        $location = getLocationDB($_POST['location_id']);
+        if($location == "No such location"){
+          $response['error'] = $location;
+        }
+        else{
+          if($location['owner_id'] == $_SESSION['user']->getId() ){
+            deleteLocationDB($_POST['location_id']);
+            $response['success'] = "Location deleted";
+          }
+          else{
+            $response['error'] = "You are not owner";
+          }
+        }
+      }
     }
     else{
       $response['error'] = "You are not logged on";

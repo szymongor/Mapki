@@ -22,4 +22,11 @@
 
     </EditText>
 
+    <CheckBox
+        android:text="private"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/checkBox_isPrivate"
+        android:checked="true" />
+
 </LinearLayout>

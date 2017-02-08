@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.EditText;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -198,6 +199,10 @@ public class GmapFragment extends Fragment implements OnMapReadyCallback, Google
         alertDialogBuilder.setView(promptsView);
         final EditText userInput = (EditText) promptsView
                 .findViewById(R.id.editTextDialogUserInput);
+        final CheckBox isPrivate = (CheckBox) promptsView.findViewById(R.id.checkBox_isPrivate);
+
+
+
 
 
         // set dialog message
@@ -210,7 +215,7 @@ public class GmapFragment extends Fragment implements OnMapReadyCallback, Google
                                 LatLng currentLocation = new LatLng(myLatitude, myLongitude);
                                 mMap.addMarker(new MarkerOptions().position(currentLocation).title(userInput.getText().toString()));
                                 mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLocation));
-                                MapkiApiClient.addLocation(context, myLatitude, myLongitude, userInput.getText().toString(), false);
+                                MapkiApiClient.addLocation(context, myLatitude, myLongitude, userInput.getText().toString(), isPrivate.isChecked());
                             }
                         })
                 .setNegativeButton("Cancel",

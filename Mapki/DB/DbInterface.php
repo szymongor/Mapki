@@ -48,6 +48,31 @@
     return $response;
   }
 
+  function deleteLocationDB($location_id){
+    global $host, $db_user, $db_password, $db_name;
+		$db_connect = @new mysqli($host, $db_user, $db_password, $db_name);
+		$queryStr = sprintf('DELETE FROM `locations` WHERE location_id = %s',$location_id);
+		$db_connect->query($queryStr);
+		mysqli_close($db_connect);
+  }
+
+  function getLocationDB($location_id){
+    global $host, $db_user, $db_password, $db_name;
+		$db_connect = @new mysqli($host, $db_user, $db_password, $db_name);
+		$queryStr = sprintf('SELECT * FROM `locations` WHERE location_id = "%s"',$location_id);
+		$result = @$db_connect->query($queryStr);
+		$loc_number = $result->num_rows;
+    if($loc_number > 0 ){
+      $location = $result->fetch_assoc();
+    }
+    else{
+      $location = "No such location";
+    }
+
+		mysqli_close($db_connect);
+		return $location;
+  }
+
   function getPlayersLocationsDB($owner_id){
     global $host, $db_user, $db_password, $db_name;
 		$db_connect = @new mysqli($host, $db_user, $db_password, $db_name);
